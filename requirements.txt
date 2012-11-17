@@ -1,0 +1,10 @@
+openpyxl
+django
+django-nose
+requests
+pytz
+https://github.com/yourcelf/olwidget/zipball/master
+django-debug-toolbar
+psycopg2
+gunicorn
+mock
