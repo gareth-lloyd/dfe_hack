@@ -118,4 +118,16 @@ class Pupil(models.Model):
 
     KS4_GPTSPE = models.FloatField(blank=True, null=True)
 
+class KeyValue(models.Model):
+    key = models.CharField(unique=True, max_length=128)
+    school = models.ForeignKey(School, blank=True, null=True)
+    value = models.FloatField()
+
+    class Meta:
+        unique_together = ('key', 'school')
+
+def poss_values(attr):
+    pupils = School.objects.all()[0].pupil_set
+    return set(pupils.values_list(attr, flat=True))
+
 

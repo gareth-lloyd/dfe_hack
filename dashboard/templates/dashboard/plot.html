@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block js %}
+    {{ block.super }}
+    <script type="application/javascript">
+        $.JSON('/plot/', success=function(data) {
+            new Highcharts.Chart({
+                 chart: {
+                    renderTo: graphDiv,
+                    type: 'line',
+                    height: '200'
+                 },
+                 yAxis: {
+                    title: {
+                       text: this.options.country.get('currency')
+                    }
+                 },
+                 title: {text: null},
+                 series: [{
+                    showInLegend: false,
+                    data: data.x
+                },
+                {
+                    showInLegend: false,
+                    data: data.y
+                }]
+             });
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+
+{% endblock %}

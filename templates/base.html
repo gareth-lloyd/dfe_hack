@@ -1,0 +1,49 @@
+{% load url from future %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+    {% block css %}
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/style.css" />
+    {% endblock css %}
+
+    {% block js %}
+    <script src="{{ STATIC_URL }}js/lib/jquery.js" ></script>
+    <script src="{{ STATIC_URL }}js/lib/highcharts.js" ></script>
+    <script src="{{ STATIC_URL }}js/lib/json2.js"></script>
+    <script src="{{ STATIC_URL }}js/lib/underscore.js"></script>
+    <script src="{{ STATIC_URL }}js/lib/backbone.js"></script>
+    {% endblock js %}
+
+    <title>{% block title %}NPD Explorer{% endblock %}</title>
+</head>
+
+<body>
+    <div class="navbar">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="brand" href="/"><img src="{{ STATIC_URL }}images/logo-small.png" /></a>
+          <div class="nav-collapse">
+            <ul class="nav">
+            {% block menubar %}
+                <li><a href="/admin/">Admin</a></li>
+            {% endblock %}
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="span12">
+            {% block content %}
+                Content Goes Here
+            {% endblock %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

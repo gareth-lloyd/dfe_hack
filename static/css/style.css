@@ -1,0 +1,34 @@
+body {
+    padding: 10px 10px 40px;
+}
+
+/* Slum detail */
+.slum-description {
+    margin: 0 0 2em;
+}
+span.required{
+    color:#dd0000;
+}
+
+.sidebar-nav {
+	padding: 9px;
+}
+
+.sidebar-nav-fixed {
+    position:fixed;
+    top:206px;
+}
+
+@media (max-width: 767px) {
+    .sidebar-nav-fixed {
+        position:static;
+        width:auto;
+    }
+}
+
+@media (max-width: 979px) {
+    .sidebar-nav-fixed {
+        top:70px;
+    }
+}
+

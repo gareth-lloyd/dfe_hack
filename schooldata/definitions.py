@@ -62,8 +62,8 @@ PUPIL_FIELD_MAP = {
         'CEN_LSOA',
         'CEN_LanguageGroupMinor',
 
-        'KS2_CVAAPS',
-        'KS2_ENGLEV',
+        'KS2_CVAAPS', # KS2 average point score
+        'KS2_ENGLEV', # 
         'KS2_MATLEV',
         'KS2_SCILEV',
         'KS2_TOTPTS',

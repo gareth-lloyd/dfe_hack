@@ -36,3 +36,4 @@ nosetests.xml
 
 rawdata/*
 dfe/local_settings.py
+*.swp
