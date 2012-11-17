@@ -1,7 +1,8 @@
 import csv, pprint
-from schooldata.models import School, Pupil
 from django.core.management.base import BaseCommand
 
+from schooldata.models import School, Pupil
+from schooldata.util import paged
 from schooldata.definitions import SCHOOL_FIELD_MAP, PUPIL_FIELD_MAP
 PAGE_SIZE = 200
 TRUE_VALS = ('1', 'Y', 'y', 'True', 'true')
@@ -13,15 +14,6 @@ def get_school(urn):
 
     SCHOOL_CACHE[urn] = School.objects.get(urn=urn)
     return SCHOOL_CACHE[urn]
-
-def paged(page_size, iterable):
-    page= []
-    for item in iterable:
-        page.append( item )
-        if len(page) == page_size:
-            yield page
-            page= []
-    yield page
 
 def convert(_type, val, field_name):
     if _type == bool:

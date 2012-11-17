@@ -22,6 +22,21 @@ class PostCode(models.Model):
     def __unicode__(self):
         return "{coarse} {fine}".format(coarse=self.coarse, fine=self.fine)
 
+
+class Area(models.Model):
+    lsoa = models.CharField(max_length=20, db_index=True, unique=True)
+    msoa = models.CharField(max_length=20, db_index=True)
+    name = models.CharField(max_length=60, db_index=True, unique=True)
+
+    deprivation_score = models.FloatField()
+    income_score = models.FloatField()
+    health_score = models.FloatField()
+    employment_score = models.FloatField()
+    education_score = models.FloatField()
+    housing_score = models.FloatField()
+    crime_score = models.FloatField()
+    environment_score = models.FloatField()
+
 class School(models.Model):
     urn = models.CharField(max_length=20, db_index=True, unique=True)
 
@@ -35,8 +50,11 @@ class School(models.Model):
     full_postcode = models.CharField(max_length=10)
     postcode = models.ForeignKey(PostCode)
 
+    lsoas = models.ManyToManyField(Area)
+
     def __unicode__(self):
         return self.name
+
 
 class Pupil(models.Model):
     school = models.ForeignKey(School)
