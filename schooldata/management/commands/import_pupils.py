@@ -1,11 +1,10 @@
-import csv
+import csv, pprint
 from schooldata.models import School, Pupil
 from django.core.management.base import BaseCommand
 
 from schooldata.definitions import SCHOOL_FIELD_MAP, PUPIL_FIELD_MAP
 PAGE_SIZE = 200
 TRUE_VALS = ('1', 'Y', 'y', 'True', 'true')
-ACTUAL_TRUE_VALS = set()
 
 SCHOOL_CACHE = {}
 def get_school(urn):
@@ -24,24 +23,29 @@ def paged(page_size, iterable):
             page= []
     yield page
 
-def convert(_type, val):
+def convert(_type, val, field_name):
     if _type == bool:
-        ACTUAL_TRUE_VALS.add(val)
         return val in TRUE_VALS
-    else:
-        return _type(val)
+    elif val:
+        if _type == int:
+            return int(float(val))
+        elif _type == float:
+            return float(val)
+        else:
+            return val
 
 def row_to_pupil(row):
-    urn = row.pop('KS4_URN')
-    row['school'] = get_school(urn)
+    urn = row.get('KS4_URN')
     for key in SCHOOL_FIELD_MAP.keys():
         del row[key]
 
-    for _type in (int, bool, float):
+    kwargs = {}
+    for _type in (int, bool, float, str):
         for field_name in PUPIL_FIELD_MAP.get(_type):
-            row[field_name] = convert(_type, row[field_name])
+            kwargs[field_name] = convert(_type, row[field_name], field_name)
+    kwargs['school'] = get_school(urn)
 
-    return Pupil(**row)
+    return Pupil(**kwargs)
 
 class Command(BaseCommand):
     args = ''
@@ -55,7 +59,5 @@ class Command(BaseCommand):
                 pupils = [row_to_pupil(row) for row in page]
                 Pupil.objects.bulk_create(pupils)
                 done += PAGE_SIZE
-                print done
-                break
+                pprint.pprint(done)
 
-        print ACTUAL_TRUE_VALS

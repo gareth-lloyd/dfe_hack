@@ -14,7 +14,6 @@ PUPIL_FIELD_MAP = {
         'ABS_PersistentAbsentee15_3Term',
         'ABS_PersistentAbsentee_3Term',
         'CEN_FSMEligible',
-        'CEN_SENProvision',
         'KS4_ENTRY_5', # entered for at least 5 GCSE/equivs
         'KS4_ALLSCI', # entered all sciences
         'KS4_FIVEAC',
@@ -58,20 +57,22 @@ PUPIL_FIELD_MAP = {
         'KS4_GPTSPE', # points per entry including equivs
     ],
     str: [
+        'KS4_RECORDID',
         'CEN_EthnicGroupMinor',
         'CEN_LSOA',
         'CEN_LanguageGroupMinor',
 
         'KS2_CVAAPS',
-        'KS2_ENGLEV','5',
-        'KS2_MATLEV','5',
-        'KS2_SCILEV','5',
-        'KS2_TOTPTS','99',
+        'KS2_ENGLEV',
+        'KS2_MATLEV',
+        'KS2_SCILEV',
+        'KS2_TOTPTS',
 
         'KS4_GENDER',
         'KS4_LA',   #local auth
         'KS4_TOE_CODE', # type of extablishment
         'KS4_HGMATH', # highest grade maths ('A-G')
+        'CEN_SENProvision',
     ]
 }
 

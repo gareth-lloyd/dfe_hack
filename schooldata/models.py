@@ -2,7 +2,7 @@ from django.contrib.gis.db import models
 
 class County(models.Model):
     name = models.CharField(max_length=128, unique=True)
-    shape = models.PolygonField(blank=True, null=True)
+    shape = models.MultiPolygonField(blank=True, null=True)
 
     objects = models.GeoManager()
 
@@ -40,8 +40,9 @@ class School(models.Model):
 
 class Pupil(models.Model):
     school = models.ForeignKey(School)
-
+    KS4_RECORDID = models.CharField(max_length=20, unique=True)
     KS4_GENDER = models.CharField(max_length=100, blank=True, null=True)
+
     KS4_LA = models.CharField(max_length=100, blank=True, null=True)
     KS4_URN = models.CharField(max_length=100, blank=True, null=True)
     KS4_TOE_CODE = models.CharField(max_length=100, blank=True, null=True)
@@ -58,17 +59,17 @@ class Pupil(models.Model):
     EXC_TotalFixedSessions = models.IntegerField(blank=True, null=True)
 
     CEN_FSMEligible = models.BooleanField()
-    CEN_SENProvision = models.BooleanField()
     CEN_AgeAtStartOfAcademicYear = models.IntegerField(blank=True, null=True)
-    CEN_EthnicGroupMinor = models.CharField(max_length=100, blank=True, null=True)
-    CEN_LSOA = models.CharField(max_length=100, blank=True, null=True)
-    CEN_LanguageGroupMinor = models.CharField(max_length=100, blank=True, null=True)
+    CEN_EthnicGroupMinor = models.CharField(max_length=20, blank=True, null=True)
+    CEN_LSOA = models.CharField(max_length=10, blank=True, null=True)
+    CEN_LanguageGroupMinor = models.CharField(max_length=20, blank=True, null=True)
+    CEN_SENProvision = models.CharField(max_length=2, blank=True, null=True)
 
-    KS2_CVAAPS = models.CharField(max_length=100, blank=True, null=True)
-    KS2_ENGLEV = models.CharField(max_length=100, blank=True, null=True)
-    KS2_MATLEV = models.CharField(max_length=100, blank=True, null=True)
-    KS2_SCILEV = models.CharField(max_length=100, blank=True, null=True)
-    KS2_TOTPTS = models.CharField(max_length=100, blank=True, null=True)
+    KS2_CVAAPS = models.CharField(max_length=10, blank=True, null=True)
+    KS2_ENGLEV = models.CharField(max_length=10, blank=True, null=True)
+    KS2_MATLEV = models.CharField(max_length=10, blank=True, null=True)
+    KS2_SCILEV = models.CharField(max_length=10, blank=True, null=True)
+    KS2_TOTPTS = models.CharField(max_length=10, blank=True, null=True)
 
     KS4_ENTRY_5 = models.BooleanField()
     KS4_ALLSCI = models.BooleanField()
@@ -90,11 +91,13 @@ class Pupil(models.Model):
     KS4_PASS_AC_AAT = models.IntegerField(blank=True, null=True)
     KS4_PASS_AG = models.IntegerField(blank=True, null=True)
     KS4_KS4SCI = models.IntegerField(blank=True, null=True)
-    KS4_HGMATH = models.CharField(max_length=100, blank=True, null=True)
+    KS4_HGMATH = models.CharField(max_length=2, blank=True, null=True)
 
     KS4_KS2ENG24P = models.IntegerField(blank=True, null=True)
     KS4_KS2MAT24P = models.IntegerField(blank=True, null=True)
     KS4_Flag24ENGPrg = models.IntegerField(blank=True, null=True)
     KS4_Flag24MATPrg = models.IntegerField(blank=True, null=True)
+
+    KS4_GPTSPE = models.FloatField(blank=True, null=True)
 
 

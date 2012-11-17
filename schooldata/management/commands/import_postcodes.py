@@ -5,7 +5,7 @@ from django.core.management.base import BaseCommand
 
 class Command(BaseCommand):
     args = ''
-    help = 'Load the poscodes from csv'
+    help = 'Load the postcodes from csv'
 
     def handle(self, *args, **options):
         with open('rawdata/postcodes.csv', 'r') as f:

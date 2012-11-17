@@ -8,3 +8,4 @@ django-debug-toolbar
 psycopg2
 gunicorn
 mock
+path.py
