@@ -15,6 +15,6 @@ class Command(BaseCommand):
                 if row_num == 0:
                     continue
                 _, coarse, lat, lon = row
-                centre = Point(lon, lat)
+                centre = Point(float(lon), float(lat))
                 PostCode.objects.create(coarse=coarse, centre=centre)
 
