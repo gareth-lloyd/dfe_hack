@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% block js %}
+    {{ block.super }}
+    {{ map.media }}
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <h1>
+                {{ county.name }}
+            </h1>
+        </div>
+    </div>
+
+    <div class="navbar">
+      <div class="navbar-inner">
+        <a class="brand" href="#">Models</a>
+        <ul class="nav">
+            {% for code, title in stats.items %}
+            <li{% if code == op.code %} class="active"{% endif %}>
+                <a href="{% url 'lea' county.id code %}">
+                    {{ title }}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+      </div>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <h3>{{ op.description }}</h3>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span12">
+            {{ map }}
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="span6">
+            <h3>{{ op.best_title }}</h3>
+            <div id="bestGraph">
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            School
+                        </th>
+                        <th>
+                            {{ op.performance_title }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in op.best %}
+                    <tr>
+                        <td>
+                            {{ result.school }}
+                        </td>
+                        <td>
+                            {{ result.value|floatformat }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="span6">
+            <h3>{{ op.worst_title }}</h3>
+            <div id="worstGraph">
+            </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            School
+                        </th>
+                        <th>
+                            {{ op.performance_title }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for result in op.worst %}
+                    <tr>
+                        <td>
+                            {{ result.school }}
+                        </td>
+                        <td>
+                            {{ result.value|floatformat }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

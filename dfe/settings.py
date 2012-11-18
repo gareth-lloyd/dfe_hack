@@ -115,6 +115,7 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'schooldata',
     'dashboard',
+    'olwidget',
 )
 
 # A sample logging configuration. The only tangible logging
@@ -145,3 +146,5 @@ LOGGING = {
         },
     }
 }
+
+OL_API = "http://openlayers.org/api/2.12/OpenLayers.js"

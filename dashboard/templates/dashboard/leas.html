@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load url from future %}
+{% block content %}
+    <div class="row">
+        <div class="span12">
+            <h1>
+                Choose Local Authority
+            </h1>
+            <ul>
+                {% for county in counties %}
+                <li>
+                    <a href="{% url 'lea' county.id 'predictedattainment' %}">
+                        {{ county.name }}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

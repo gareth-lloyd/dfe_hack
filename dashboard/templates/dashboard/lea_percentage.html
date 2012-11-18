@@ -1,0 +1,48 @@
+{% extends "dashboard/lea.html" %}
+{% load url from future %}
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            graph = function(data, line, selector) {
+                new Highcharts.Chart({
+                     chart: {
+                        renderTo: selector
+                     },
+                     xAxis: {
+                        title: {
+                            text: null
+                        }
+                     },
+                     yAxis: {
+                        title: {
+                            text: 'Percentage'
+                        }
+                     },
+                     title: {text: null},
+                     series: [{
+                        type: 'column',
+                        name: 'datapoints',
+                        showInLegend: false,
+                        data: data,
+                    },{
+                        name: 'national average',
+                        type: 'line',
+                        showInLegend: false,
+                        data: line
+                    }]
+                 });
+            };
+            graph(
+                {{ op.best_values }},
+                {{ op.average_line }},
+                'bestGraph'
+            );
+            graph(
+                {{ op.worst_values}},
+                {{ op.average_line }},
+                'worstGraph'
+            );
+        });
+    </script>
+{% endblock %}

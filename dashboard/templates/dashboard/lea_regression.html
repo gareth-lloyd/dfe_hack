@@ -1,0 +1,51 @@
+{% extends "dashboard/lea.html" %}
+{% load url from future %}
+{% block js %}
+    {{ block.super }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            graph = function(data, line, selector) {
+                new Highcharts.Chart({
+                     chart: {
+                        renderTo: selector
+                     },
+                     xAxis: {
+                        title: {
+                            text: '{{ op.x_label }}'
+                        }
+                     },
+                     yAxis: {
+                        title: {
+                            text: '{{ op.y_label }}'
+                        }
+                     },
+                     title: {text: null},
+                     series: [{
+                        type: 'scatter',
+                        name: 'datapoints',
+                        showInLegend: false,
+                        data: data,
+                        marker: {
+                            radius: 2
+                        }
+                    },{
+                        name: 'line of best fit',
+                        type: 'line',
+                        showInLegend: false,
+                        data: line
+                    }]
+                 });
+            };
+            graph(
+                {{ op.combined_best }},
+                {{ op.regression_line }},
+                'bestGraph'
+            );
+            graph(
+                {{ op.combined_worst }},
+                {{ op.regression_line }},
+                'worstGraph'
+            );
+        });
+    </script>
+{% endblock %}

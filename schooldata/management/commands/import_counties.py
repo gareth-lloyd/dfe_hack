@@ -33,6 +33,7 @@ class Command(BaseCommand):
                         this_poly = []
                     else:
                         this_poly.append(Point(float(lon), float(lat)))
+            polygons.append(Polygon(this_poly))
             County.objects.create(name=name, shape=MultiPolygon(polygons))
 
 

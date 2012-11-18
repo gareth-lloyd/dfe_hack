@@ -7,6 +7,11 @@ class County(models.Model):
 
     objects = models.GeoManager()
 
+    @property
+    def schools(self):
+        postcodes = PostCode.objects.filter(centre__within=self.shape)
+        return School.objects.filter(postcode__in=postcodes)
+
     def __unicode__(self):
         return self.name
 
