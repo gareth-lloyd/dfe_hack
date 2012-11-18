@@ -3,33 +3,36 @@
 {% block js %}
     {{ block.super }}
     <script type="application/javascript">
-        $.JSON('/plot/', success=function(data) {
+        $.ajax('/schooldata/plot/', {success: function(data) {
+                console.log(data);
             new Highcharts.Chart({
                  chart: {
-                    renderTo: graphDiv,
-                    type: 'line',
-                    height: '200'
+                    renderTo: 'graph',
+                    type: 'scatter',
                  },
                  yAxis: {
                     title: {
-                       text: this.options.country.get('currency')
+                       text: 'KS2 attainment'
+                    }
+                 },
+                 yAxis: {
+                    title: {
+                       text: 'KS4 attainment'
                     }
                  },
                  title: {text: null},
                  series: [{
+                    name: 'attainment',
                     showInLegend: false,
-                    data: data.x
-                },
-                {
-                    showInLegend: false,
-                    data: data.y
+                    data: data.data
                 }]
              });
-        });
+        }});
     </script>
 {% endblock %}
 
 {% block content %}
-
+<div id="graph">
+</div>
 
 {% endblock %}

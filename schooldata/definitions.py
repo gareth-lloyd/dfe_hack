@@ -51,7 +51,6 @@ PUPIL_FIELD_MAP = {
         'KS4_KS2MAT24P', # maths prior attainment
         'KS4_Flag24ENGPrg', # achieved expected KS2->KS4 eng progress
         'KS4_Flag24MATPrg', # math progress
-
     ],
     float : [
         'KS4_GPTSPE', # points per entry including equivs

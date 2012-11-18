@@ -1,4 +1,5 @@
 from django.contrib.gis.db import models
+from collections import Counter
 
 class County(models.Model):
     name = models.CharField(max_length=128, unique=True)
@@ -37,6 +38,9 @@ class Area(models.Model):
     crime_score = models.FloatField()
     environment_score = models.FloatField()
 
+    def __unicode__(self):
+        return self.name
+
 class School(models.Model):
     urn = models.CharField(max_length=20, db_index=True, unique=True)
 
@@ -51,6 +55,58 @@ class School(models.Model):
     postcode = models.ForeignKey(PostCode)
 
     lsoas = models.ManyToManyField(Area)
+
+    def _depr(self, attr):
+        c = Counter(self.pupil_set.all().values_list('CEN_LSOA', flat=True))
+        for lsoa, _ in c.most_common(): 
+            try:
+                return getattr(Area.objects.get(lsoa=lsoa), attr)
+            except Area.DoesNotExist:
+                continue
+
+    @property
+    def income_score(self):
+        return self._depr('income_score')
+
+    @property
+    def deprivation_score(self):
+        return self._depr('deprivation_score')
+
+    @property
+    def education_score(self):
+        return self._depr('education_score')
+
+    def _pupil_percentage(self, attr):
+        num_pupils = self.pupil_set.count()
+        if num_pupils:
+            kwargs = {attr: True}
+            num_true = float(self.pupil_set.filter(**kwargs).count())
+            return  num_true / num_pupils
+        else:
+            return None
+
+    def _pupil_average(self, attr):
+        num_pupils = self.pupil_set.count()
+        if num_pupils:
+            return  float(self._pupil_total(attr)) / num_pupils
+        else:
+            return None
+
+    def _pupil_total(self, attr):
+        total = self.pupil_set.aggregate(models.Sum(attr))
+        return total.values()[0] or 0
+
+    @property
+    def avg_exclusions(self):
+        return self._pupil_average('EXC_PermanentExclusionCount')
+
+    @property
+    def percent_5ac(self):
+        return self._pupil_percentage('KS4_FIVEAC') 
+
+    @property
+    def percent_fsm(self):
+        return self._pupil_percentage('CEN_FSMEligible') 
 
     def __unicode__(self):
         return self.name
