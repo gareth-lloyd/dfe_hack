@@ -1,13 +1,30 @@
 {% extends "base.html" %}
 {% load url from future %}
+{% block js %}
+    {{ block.super }}
+    {{ map.media }}
+{% endblock %}
 {% block content %}
     <div class="row">
         <div class="span12">
             <h1>
-                Choose Local Authority
+                National Pupil Database Data Explorer
             </h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span12">
+            <div class="well">
+                {{ map }}
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+    {% for column in counties_columns %}
+        <div class="span3">
             <ul>
-                {% for county in counties %}
+                {% for county in column %}
                 <li>
                     <a href="{% url 'lea' county.id 'predictedattainment' %}">
                         {{ county.name }}
@@ -16,5 +33,6 @@
                 {% endfor %}
             </ul>
         </div>
+    {% endfor %}
     </div>
 {% endblock %}

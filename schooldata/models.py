@@ -113,6 +113,10 @@ class School(models.Model):
     def percent_fsm(self):
         return self._pupil_percentage('CEN_FSMEligible') 
 
+    @property
+    def location(self):
+        return self.postcode.centre
+
     def __unicode__(self):
         return self.name
 

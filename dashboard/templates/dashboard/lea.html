@@ -60,7 +60,7 @@
                     {% for result in op.best %}
                     <tr>
                         <td>
-                            {{ result.school }}
+                            {{ result.school.name }}
                         </td>
                         <td>
                             {{ result.value|floatformat }}
@@ -89,7 +89,7 @@
                     {% for result in op.worst %}
                     <tr>
                         <td>
-                            {{ result.school }}
+                            {{ result.school.name }}
                         </td>
                         <td>
                             {{ result.value|floatformat }}

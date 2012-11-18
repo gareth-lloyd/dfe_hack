@@ -1,4 +1,5 @@
 import pandas as pd
+from django.contrib.gis.db.models import Sum
 from schooldata.models import Pupil, KeyValue, Area
 
 TOP_X = 5
@@ -67,6 +68,15 @@ class Operation(object):
     def worst(self):
         return self._sorted()[:TOP_X]
 
+    def _schools(self, results):
+        return [r['school'] for r in results]
+
+    def best_schools(self):
+        return self._schools(self.best())
+
+    def worst_schools(self):
+        return self._schools(self.worst())
+
     def get_schools(self):
         """Must be implemented by sublcass or use e.g. 
         CountyOperationMixin"""
@@ -88,7 +98,7 @@ class RegressionOperation(Operation):
 
         prop_over = (float(len(over)) / n_pupils) * 100 if n_pupils else None
         self.results.append({
-            'school': school.name,
+            'school': school,
             'under': under,
             'over': over,
             'value': prop_over,
@@ -249,17 +259,11 @@ class SingleValueOperation(Operation):
     """Any Operation that describes a school with a single value,
     e.g. an average across students.
     """
-    template = 'dashboard/lea_single.html'
-
-    def __init__(self):
-        super(PercentageOperation, self).__init__()
+    template = 'dashboard/lea_single_value.html'
 
     @classmethod
     def calculate(cls, pupils):
-        kwargs = {cls.pupil_attr: True}
-        num_true = pupils.all().filter(**kwargs).count()
-        num_pupils = pupils.all().count()
-        return (float(num_true) / num_pupils) * 100 if num_pupils else None
+        raise NotImplemented
 
     @classmethod
     def national_average(cls):
@@ -273,8 +277,10 @@ class SingleValueOperation(Operation):
         return [avg for _ in range(TOP_X)]
 
     def add_result(self, school, value):
-        self.results.append({'school': school.name,
-            'value': value})
+        self.results.append({
+            'school': school,
+            'value': value
+        })
 
     def best_values(self):
         return [r['value'] for r in self.best()]
@@ -285,14 +291,9 @@ class SingleValueOperation(Operation):
     def run(self):
         for school in self.get_schools():
             self.add_result(school, self.calculate(school.pupil_set.all()))
-    pass
 
-class PercentageOperation(Operation):
+class PercentageOperation(SingleValueOperation):
     performance_title = "%"
-    template = 'dashboard/lea_percentage.html'
-
-    def __init__(self):
-        super(PercentageOperation, self).__init__()
 
     @classmethod
     def calculate(cls, pupils):
@@ -301,30 +302,19 @@ class PercentageOperation(Operation):
         num_pupils = pupils.all().count()
         return (float(num_true) / num_pupils) * 100 if num_pupils else None
 
+
+class AverageOperation(SingleValueOperation):
+    performance_title = "Average"
+
     @classmethod
-    def national_average(cls):
-        value = cls.calculate(Pupil.objects.all())
-        kv = _get_kv(cls.KV_KEY)
-        kv.value = value
-        kv.save()
+    def calculate(cls, pupils):
+        num_pupils = pupils.all().count()
+        if num_pupils:
+            total = pupils.all().aggregate(Sum(cls.pupil_attr)).values()[0]
+            return (float(total) / num_pupils)
+        else:
+            return None
 
-    def average_line(self):
-        avg = _get_kv(self.KV_KEY).value
-        return [avg for _ in range(TOP_X)]
-
-    def add_result(self, school, value):
-        self.results.append({'school': school.name,
-            'value': value})
-
-    def best_values(self):
-        return [r['value'] for r in self.best()]
-
-    def worst_values(self):
-        return [r['value'] for r in self.worst()]
-
-    def run(self):
-        for school in self.get_schools():
-            self.add_result(school, self.calculate(school.pupil_set.all()))
 
 class Absentee(CountyOperationMixin, PercentageOperation):
     best_title = "Worst Performing Schools"
